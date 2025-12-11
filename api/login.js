@@ -1,38 +1,45 @@
-// Yksinkertainen "admin"-kirjautuminen frontissa (ei oikea tietoturva, vain demo/asiakkaalle)
-// (Deleted these three lines)
+module.exports = (req, res) => {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
-// Inside if (loginToggle && loginPanel && loginForm) { ... } block:
-
-loginForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-
-  try {
-    const resp = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+  // Debug GET: tarkistetaan että ympäristömuuttujat näkyvät
+  if (req.method === "GET") {
+    return res.status(200).json({
+      ok: true,
+      envSeen: {
+        emailSet: !!adminEmail,
+        passwordSet: !!adminPassword
+      },
+      message: "GET toimii, POST on kirjautumista varten."
     });
-
-    if (!resp.ok) {
-      alert("Väärä sähköposti tai salasana.");
-      return;
-    }
-
-    const data = await resp.json();
-
-    if (data.success) {
-      localStorage.setItem("tkdLoggedIn", "true");
-      setLoggedInState(true);
-      loginForm.reset();
-    } else {
-      alert("Väärä sähköposti tai salasana.");
-    }
-
-  } catch (err) {
-    console.error(err);
-    alert("Kirjautumisessa tapahtui virhe.");
   }
-});
+
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ success: false, message: "Method not allowed" });
+  }
+
+  const body = req.body || {};
+  const email = body.email || "";
+  const password = body.password || "";
+
+  if (!adminEmail || !adminPassword) {
+    return res.status(500).json({
+      success: false,
+      message: "Serverin ympäristömuuttujia ei ole asetettu.",
+      envSeen: {
+        emailSet: !!adminEmail,
+        passwordSet: !!adminPassword
+      }
+    });
+  }
+
+  if (email === adminEmail && password === adminPassword) {
+    return res.status(200).json({ success: true });
+  }
+
+  return res
+    .status(401)
+    .json({ success: false, message: "Väärä sähköposti tai salasana." });
+};
