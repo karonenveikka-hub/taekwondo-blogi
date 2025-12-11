@@ -10,10 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const loginStatus = document.getElementById("loginStatus");
 
-  // Yksinkertainen "admin"-kirjautuminen frontissa (ei oikea tietoturva, vain demo/asiakkaalle)
-  const ADMIN_EMAIL = "asiakas@example.com";      // vaihda asiakkaan sähköposti
-  const ADMIN_PASSWORD = "salasana123";           // vaihda asiakkaan salasana
-
   function setLoggedInState(isLoggedIn) {
     if (!loginToggle || !loginStatus) return;
     if (isLoggedIn) {
@@ -46,19 +42,37 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    loginForm.addEventListener("submit", (event) => {
+    loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const emailInput = document.getElementById("loginEmail");
-      const passwordInput = document.getElementById("loginPassword");
-      const email = emailInput ? emailInput.value.trim() : "";
-      const password = passwordInput ? passwordInput.value : "";
 
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        localStorage.setItem("tkdLoggedIn", "true");
-        setLoggedInState(true);
-        loginForm.reset();
-      } else {
-        alert("Väärä sähköposti tai salasana.");
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        const resp = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (!resp.ok) {
+          alert("Väärä sähköposti tai salasana.");
+          return;
+        }
+
+        const data = await resp.json();
+
+        if (data.success) {
+          localStorage.setItem("tkdLoggedIn", "true");
+          setLoggedInState(true);
+          loginForm.reset();
+        } else {
+          alert("Väärä sähköposti tai salasana.");
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Kirjautumisessa tapahtui virhe.");
       }
     });
   }
