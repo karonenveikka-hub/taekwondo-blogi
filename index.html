@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taekwondo-vyöblogi</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header-bar">
+      <h1 class="site-title">Taekwondo-vyöblogi</h1>
+      <div class="login-controls">
+        <span id="loginStatus" class="login-status">Ei kirjautunut</span>
+        <button id="loginToggle" class="login-button" type="button">Kirjaudu sisään</button>
+      </div>
+    </header>
+
+    <div id="loginPanel" class="login-panel">
+      <form id="loginForm" class="login-form">
+        <label>
+          Sähköposti
+          <input type="email" id="loginEmail" required />
+        </label>
+        <label>
+          Salasana
+          <input type="password" id="loginPassword" required />
+        </label>
+        <button type="submit">Kirjaudu</button>
+      </form>
+      <p class="login-hint">
+        (Tämä on yksinkertainen kirjautuminen vain blogin omistajalle – vaihda tunnukset javascript.js-tiedostoon.)
+      </p>
+    </div>
+
+    <main class="layout">
+      <section class="belts-column" aria-label="Taekwondo-vyöt">
+        <button class="belt is-active belt--white" data-belt="white">
+          <span class="belt-label">Valkoinen vyö</span>
+        </button>
+        <button class="belt belt--yellow" data-belt="yellow">
+          <span class="belt-label">Keltainen vyö</span>
+        </button>
+        <button class="belt belt--green" data-belt="green">
+          <span class="belt-label">Vihreä vyö</span>
+        </button>
+        <button class="belt belt--blue" data-belt="blue">
+          <span class="belt-label">Sininen vyö</span>
+        </button>
+        <button class="belt belt--red" data-belt="red">
+          <span class="belt-label">Punainen vyö</span>
+        </button>
+        <button class="belt belt--black" data-belt="black">
+          <span class="belt-label">Musta vyö</span>
+        </button>
+      </section>
+
+      <section class="content-column">
+        <div class="intro-card">
+          <h2>Miksi tein tämän sivun</h2>
+          <p>
+            Olen 50-vuotias taekwondon harrastelija. Treenaan omaksi iloksi, en kisoja varten,
+            ja halusin yhden selkeän sivun, josta näen missä menen ja mitä seuraavaksi pitäisi opetella.
+          </p>
+          <p>
+            Kun valitsen vasemmalta vyön, oikealle tulee juuri siihen tasoon liittyviä muistiinpanoja
+            ja treenijuttuja – vähän niin kuin oma pieni vyöblogi.
+          </p>
+        </div>
+
+        <article class="belt-info" aria-live="polite">
+          <h3>Nykyinen vyötaso</h3>
+          <p class="belt-info-level" id="belt-title">Valkoinen vyö</p>
+          <p id="belt-text">
+            Ensimmäinen askel tatamille. Tässä vaiheessa keskityn perusasentoihin, yksinkertaisiin lyönteihin
+            ja peruspotkuihin. Tärkeintä on oppia liikkumaan rennosti ja muistaa salietiketti.
+          </p>
+        </article>
+
+        <section class="note-card">
+          <h4>Treenimuistiinpanot tälle vyölle</h4>
+          <div class="note-scroll" id="belt-notes">
+            <p>
+              Esimerkkejä, mitä tänne voin kirjoittaa:
+            </p>
+            <p>
+              – Mitkä liikkeet tuntuvat vielä vaikeilta<br>
+              – Mitä ohjaaja on viimeksi huomauttanut tekniikasta<br>
+              – Yksi asia, joka meni paremmin kuin viime treeneissä
+            </p>
+            <p>
+              Kun taso vaihtuu seuraavaan vyöhön, voin päivittää tähän uudet muistiinpanot.
+              Näin näen jälkeenpäin, miten treeni on vuosien varrella kehittynyt.
+            </p>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script src="javascript.js"></script>
+</body>
+</html>
